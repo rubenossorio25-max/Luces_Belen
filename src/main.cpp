@@ -5,6 +5,17 @@
 #include "MP3Player.h"
 #include "EffectManager.h"
 #include "config.h"
+// Librerías WiFi y WebServer para ESP32
+#include <WiFi.h>
+#include <ESPAsyncWebServer.h>
+#include <DNSServer.h>
+
+// Configuración AP y WebServer
+#define AP_SSID "LucesBelenConfig"
+#define AP_PASSWORD "12345678"
+#define DNS_PORT 53
+AsyncWebServer server(80);
+DNSServer dnsServer;
 
 // ============================================================================
 // INSTANCIAS GLOBALES
@@ -58,6 +69,55 @@ void printBootInfo() {
 }
 
 // ============================================================================
+// FUNCIONES DE CONFIGURACIÓN WEB
+// ============================================================================
+
+String htmlPage() {
+  return "<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Configuración Luces Belén</title>"
+         "<meta name='viewport' content='width=device-width,initial-scale=1'>"
+         "<style>body{font-family:sans-serif;background:#222;color:#fff;padding:2em;}input,button{margin:0.5em;}</style></head><body>"
+         "<h2>Configuración Luces Belén</h2>"
+         "<form action='/config' method='POST'>"
+         "Color: <input type='color' name='color' value='#ffffff'><br>"
+         "Tiempo (ms): <input type='number' name='tiempo' min='100' max='60000' value='1000'><br>"
+         "<button type='submit'>Guardar</button>"
+         "</form>"
+         "<form action='/reset' method='POST'><button type='submit' style='background:red;color:white;'>Resetear</button></form>"
+         "</body></html>";
+}
+
+void setupWebServer() {
+  // Página principal
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(200, "text/html", htmlPage());
+  });
+
+  // Configuración
+  server.on("/config", HTTP_POST, [](AsyncWebServerRequest *request){
+    String color = "#ffffff";
+    String tiempo = "1000";
+    if (request->hasParam("color", true)) color = request->getParam("color", true)->value();
+    if (request->hasParam("tiempo", true)) tiempo = request->getParam("tiempo", true)->value();
+    // Aquí puedes guardar los valores en la configuración
+    // configManager.setColor(color); configManager.setTime(tiempo.toInt());
+    request->send(200, "text/html", "<h3>Configuración guardada</h3><a href='/'>Volver</a>");
+  });
+
+  // Reset
+  server.on("/reset", HTTP_POST, [](AsyncWebServerRequest *request){
+    // Aquí puedes hacer el reset de configuración
+    // configManager.reset();
+    request->send(200, "text/html", "<h3>¡Sistema reseteado!</h3><a href='/'>Volver</a>");
+  });
+
+  server.onNotFound([](AsyncWebServerRequest *request){
+    request->redirect("/");
+  });
+
+  server.begin();
+  }
+
+// ============================================================================
 // SETUP Y LOOP PRINCIPALES
 // ============================================================================
 
@@ -94,6 +154,20 @@ void setup() {
   configManager.begin(&phaseManager);
   configManager.loadConfiguration();
 
+    // ===================== MODO AP Y CAPTIVE PORTAL =====================
+    Serial.println("[WIFI] Iniciando Access Point...");
+    WiFi.softAP(AP_SSID, AP_PASSWORD);
+    delay(500);
+    IPAddress myIP = WiFi.softAPIP();
+    Serial.print("[WIFI] AP IP: ");
+    Serial.println(myIP);
+
+    // Iniciar DNS para captive portal
+    dnsServer.start(DNS_PORT, "*", myIP);
+
+    // Iniciar servidor web
+    setupWebServer();
+    Serial.println("[WEB] Servidor web iniciado. Conéctate a la red 'LucesBelenConfig' y abre cualquier página para configurar.");
   // Inicializar gestor de efectos
   Serial.println("[INIT] Inicializando gestor de efectos...");
   effectManager.begin(&lightController, &phaseManager);
@@ -145,4 +219,7 @@ void loop() {
 
   // Pequeño delay para evitar saturación
   delay(10);
+
+    // Mantener DNS para captive portal
+    dnsServer.processNextRequest();
 }
