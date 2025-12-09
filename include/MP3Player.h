@@ -6,8 +6,8 @@
 /**
  * @class MP3Player
  * @brief Controlador para reproductor MP3 serial
- * Nota: En ESP8266 usamos los pines D5(GPIO14) y D6(GPIO12) 
- * como puertos seriales con bit-banging manual o UART alternativo
+ * Nota: En ESP32 usamos Serial2 (RX=GPIO16, TX=GPIO17) para comunicación con el MP3
+ * o alternativamente GPIO14(RX) y GPIO12(TX) con SoftwareSerial
  */
 class MP3Player {
 private:
@@ -38,7 +38,7 @@ public:
    * @brief Inicializa el reproductor MP3
    * Simulamos comunicación serial escribiendo directamente el byte al puerto
    * Nota: Para una implementación real necesitarías una librería como SoftwareSerial
-   * compatible con ESP8266 (como EspSoftwareSerial)
+   * compatible con ESP32 (como HardwareSerial o EspSoftwareSerial)
    */
   void begin() {
     // En una implementación real, aquí inicializaríamos la comunicación

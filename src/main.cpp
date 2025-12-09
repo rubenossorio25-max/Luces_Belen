@@ -3,7 +3,6 @@
 #include "PhaseManager.h"
 #include "ConfigManager.h"
 #include "MP3Player.h"
-#include "WebServer.h"
 #include "EffectManager.h"
 #include "config.h"
 
@@ -14,7 +13,6 @@ LightController lightController;
 PhaseManager phaseManager;
 ConfigManager configManager;
 MP3Player mp3Player;
-WebServer webServer;
 EffectManager effectManager;
 
 // Estado del sistema
@@ -75,7 +73,8 @@ void setup() {
   printBootInfo();
 
   // Inicializar el generador de números aleatorios
-  randomSeed(ESP.getChipId());
+  // En ESP32 usamos el MAC address convertido a uint32
+  randomSeed((uint32_t)ESP.getEfuseMac());
 
   // Inicializar controlador de luces
   Serial.println("[INIT] Inicializando controlador de luces...");
@@ -99,10 +98,6 @@ void setup() {
   Serial.println("[INIT] Inicializando gestor de efectos...");
   effectManager.begin(&lightController, &phaseManager);
 
-  // Inicializar servidor web
-  Serial.println("[INIT] Inicializando servidor web...");
-  webServer.begin(&phaseManager);
-
   // Reproducir pista de amanecer
   mp3Player.playTrack(getTrackNumber(phaseManager.getCurrentPhase()));
 
@@ -114,9 +109,6 @@ void setup() {
  * @brief Bucle principal del sistema
  */
 void loop() {
-  // Procesar solicitudes del servidor web
-  webServer.handleClient();
-
   // Actualizar efectos especiales
   effectManager.update();
 

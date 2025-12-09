@@ -2,18 +2,19 @@
 #define CONFIG_H
 
 // ============================================================================
-// CONFIGURACIÓN DE PINES - NodeMCU ESP8266
+// CONFIGURACIÓN DE PINES - ESP32 DOIT DevKit v1
+// Pines PWM recomendados en ESP32 para control de LEDs
 // ============================================================================
-const int PIN_ROJO = 16;    // D0 - GPIO 16
-const int PIN_VERDE = 13;   // D7 - GPIO 13
-const int PIN_AZUL = 5;     // D1 - GPIO 5
-const int PIN_BLANCO = 4;   // D2 - GPIO 4
+const int PIN_ROJO = 15;    // GPIO 15 - PWM compatible
+const int PIN_VERDE = 14;   // GPIO 14 - PWM compatible
+const int PIN_AZUL = 13;    // GPIO 13 - PWM compatible
+const int PIN_BLANCO = 12;  // GPIO 12 - PWM compatible
 
-// Pines para Comunicación MP3
-// Usando Serial (UART0) del ESP8266: RX=GPIO3, TX=GPIO1
-// Nota: Para usar solo MP3 sin debug serial, cambiar en platformio.ini
-// const int MP3_RX_PIN = 3;   // No necesario, Serial maneja automáticamente
-// const int MP3_TX_PIN = 1;   // No necesario, Serial maneja automáticamente
+// Pines para Comunicación MP3 (Serial2 en ESP32)
+// Usando UART1 del ESP32: RX=GPIO16, TX=GPIO17
+// Nota: Serial2 en ESP32 por defecto usa estos pines
+// const int MP3_RX_PIN = 16;  // No necesario, Serial2 maneja automáticamente
+// const int MP3_TX_PIN = 17;  // No necesario, Serial2 maneja automáticamente
 
 // ============================================================================
 // CONFIGURACIÓN DE TIEMPOS (milisegundos)
