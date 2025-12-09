@@ -10,8 +10,10 @@ const int PIN_AZUL = 5;     // D1 - GPIO 5
 const int PIN_BLANCO = 4;   // D2 - GPIO 4
 
 // Pines para Comunicación MP3
-const int MP3_RX_PIN = 12;  // D6 - Conecta al TX del MP3
-const int MP3_TX_PIN = 14;  // D5 - Conecta al RX del MP3
+// Usando Serial (UART0) del ESP8266: RX=GPIO3, TX=GPIO1
+// Nota: Para usar solo MP3 sin debug serial, cambiar en platformio.ini
+// const int MP3_RX_PIN = 3;   // No necesario, Serial maneja automáticamente
+// const int MP3_TX_PIN = 1;   // No necesario, Serial maneja automáticamente
 
 // ============================================================================
 // CONFIGURACIÓN DE TIEMPOS (milisegundos)

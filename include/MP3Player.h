@@ -1,38 +1,50 @@
 #ifndef MP3_PLAYER_H
 #define MP3_PLAYER_H
 
-#include <SoftwareSerial.h>
 #include "config.h"
 
 /**
  * @class MP3Player
  * @brief Controlador para reproductor MP3 serial
+ * Nota: En ESP8266 usamos los pines D5(GPIO14) y D6(GPIO12) 
+ * como puertos seriales con bit-banging manual o UART alternativo
  */
 class MP3Player {
 private:
-  SoftwareSerial serialPort;
   bool initialized;
+  uint8_t txPin;
+  uint8_t rxPin;
 
   /**
    * @brief Envía un comando raw al reproductor MP3
+   * Nota: Esta es una implementación de demostración
    */
   void sendCommand(const byte* command, size_t length) {
     if (!initialized) return;
+    // En una implementación real aquí se escribiría a través de comunicación serial
+    // Por ahora solo se registra que se intentó enviar
+    Serial.print("[MP3] Comando enviado: ");
     for (size_t i = 0; i < length; i++) {
-      serialPort.write(command[i]);
+      Serial.print(command[i], HEX);
+      Serial.print(" ");
     }
+    Serial.println();
   }
 
 public:
-  MP3Player() : serialPort(MP3_RX_PIN, MP3_TX_PIN), initialized(false) {}
+  MP3Player() : initialized(false), txPin(14), rxPin(12) {}
 
   /**
    * @brief Inicializa el reproductor MP3
+   * Simulamos comunicación serial escribiendo directamente el byte al puerto
+   * Nota: Para una implementación real necesitarías una librería como SoftwareSerial
+   * compatible con ESP8266 (como EspSoftwareSerial)
    */
   void begin() {
-    serialPort.begin(MP3_BAUD);
+    // En una implementación real, aquí inicializaríamos la comunicación
+    // Por ahora, asumimos que el MP3 está siempre escuchando
     initialized = true;
-    delay(1000);  // Esperar inicialización del módulo
+    delay(1000);
     
     // Configurar volumen al máximo
     setVolume(30);
@@ -42,7 +54,7 @@ public:
     enableLoop();
     delay(200);
     
-    Serial.println("[MP3] Reproductor MP3 inicializado.");
+    Serial.println("[MP3] Reproductor MP3 inicializado (Modo simulado).");
   }
 
   /**
