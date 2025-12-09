@@ -5,10 +5,10 @@
 // CONFIGURACIÓN DE PINES - ESP32 DOIT DevKit v1
 // Pines PWM recomendados en ESP32 para control de LEDs
 // ============================================================================
-const int PIN_ROJO = 15;    // GPIO 15 - PWM compatible
-const int PIN_VERDE = 14;   // GPIO 14 - PWM compatible
-const int PIN_AZUL = 13;    // GPIO 13 - PWM compatible
-const int PIN_BLANCO = 12;  // GPIO 12 - PWM compatible
+#define PIN_ROJO 15    // GPIO 15 - PWM compatible
+#define PIN_VERDE 14   // GPIO 14 - PWM compatible
+#define PIN_AZUL 13    // GPIO 13 - PWM compatible
+#define PIN_BLANCO 12  // GPIO 12 - PWM compatible
 
 // Pines para Comunicación MP3 (Serial2 en ESP32)
 // Usando UART1 del ESP32: RX=GPIO16, TX=GPIO17
@@ -19,34 +19,34 @@ const int PIN_BLANCO = 12;  // GPIO 12 - PWM compatible
 // ============================================================================
 // CONFIGURACIÓN DE TIEMPOS (milisegundos)
 // ============================================================================
-const unsigned long DEFAULT_DURACION_AMANECER = 10000;
-const unsigned long DEFAULT_DURACION_DIA = 10000;
-const unsigned long DEFAULT_DURACION_ATARDECER = 10000;
-const unsigned long DEFAULT_DURACION_NOCHE = 10000;
-const unsigned long DEFAULT_DURACION_TRANSICION = 15000;
+#define DEFAULT_DURACION_AMANECER 10000
+#define DEFAULT_DURACION_DIA 10000
+#define DEFAULT_DURACION_ATARDECER 10000
+#define DEFAULT_DURACION_NOCHE 10000
+#define DEFAULT_DURACION_TRANSICION 15000
 
 // ============================================================================
 // CONFIGURACIÓN DE RAYO ALEATORIO
 // ============================================================================
-const unsigned long MIN_TIEMPO_ENTRE_RAYOS = 5000;      // 5 segundos
-const unsigned long MAX_TIEMPO_ENTRE_RAYOS = 20000;     // 20 segundos
-const unsigned long MIN_DURACION_DESTELLO = 10;         // ms
-const unsigned long MAX_DURACION_DESTELLO = 50;         // ms
-const int MAX_NUM_DESTELLOS = 4;
+#define MIN_TIEMPO_ENTRE_RAYOS 5000      // 5 segundos
+#define MAX_TIEMPO_ENTRE_RAYOS 20000     // 20 segundos
+#define MIN_DURACION_DESTELLO 10         // ms
+#define MAX_DURACION_DESTELLO 50         // ms
+#define MAX_NUM_DESTELLOS 4
 
 // ============================================================================
 // CONFIGURACIÓN DEL PUNTO DE ACCESO (AP) WIFI
 // ============================================================================
-const char* AP_SSID = "LuminaConfig";
-const char* AP_PASSWORD = "configurar123";
-const byte DNS_PORT = 53;
+#define AP_SSID "LuminaConfig"
+#define AP_PASSWORD "configurar123"
+#define DNS_PORT 53
 
 // ============================================================================
 // CONFIGURACIÓN SERIAL
 // ============================================================================
-const unsigned long SERIAL_BAUD = 115200;
-const unsigned long MP3_BAUD = 9600;
-const long INTERVALO_REPORTE = 1000;  // Reporte cada 1 segundo
+#define SERIAL_BAUD 115200
+#define MP3_BAUD 9600
+#define INTERVALO_REPORTE 1000  // Reporte cada 1 segundo
 
 // ============================================================================
 // CONFIGURACIÓN EEPROM

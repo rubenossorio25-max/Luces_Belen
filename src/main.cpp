@@ -4,6 +4,7 @@
 #include "ConfigManager.h"
 #include "MP3Player.h"
 #include "EffectManager.h"
+#include "WebServerManager.h"
 #include "config.h"
 
 // ============================================================================
@@ -14,6 +15,7 @@ PhaseManager phaseManager;
 ConfigManager configManager;
 MP3Player mp3Player;
 EffectManager effectManager;
+WebServerManager webServerManager;
 
 // Estado del sistema
 unsigned long lastReportTime = 0;
@@ -98,6 +100,10 @@ void setup() {
   Serial.println("[INIT] Inicializando gestor de efectos...");
   effectManager.begin(&lightController, &phaseManager);
 
+  // Inicializar servidor web
+  Serial.println("[INIT] Inicializando servidor web...");
+  webServerManager.begin(&configManager, &phaseManager, &lightController);
+
   // Reproducir pista de amanecer
   mp3Player.playTrack(getTrackNumber(phaseManager.getCurrentPhase()));
 
@@ -109,6 +115,9 @@ void setup() {
  * @brief Bucle principal del sistema
  */
 void loop() {
+  // Manejar solicitudes del servidor web
+  webServerManager.handleClient();
+
   // Actualizar efectos especiales
   effectManager.update();
 
