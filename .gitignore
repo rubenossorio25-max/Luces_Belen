@@ -1,0 +1,11 @@
+.pio
+.vscode
+.idea
+*.o
+*.a
+*.so
+.DS_Store
+*.pyc
+__pycache__
+.env
+.env.local
